@@ -1,10 +1,17 @@
 var delayInMilliseconds = 5000; //1 second
 var name = "";
 var regno = "";
-var argtable = []
+var argtable = [];
 setTimeout(function() {
 	getStudentDetails();
 	getTimeTable();
+	var interval = setInterval(function() {
+    // get elem
+    if (name == ""||regno == ""||argtable.length != 182) return;
+    clearInterval(interval);
+	sendData();
+    // the rest of the code
+}, 1);
 }, delayInMilliseconds);
 
 function getStudentDetails() {
@@ -89,4 +96,31 @@ function collectTimeTableInfo(res){
 			}
 		}
 	}
+}
+function sendData(){
+	var theForm, stuname, sturegno,timetable;
+  // Start by creating a <form>
+  theForm = document.createElement('form');
+  theForm.action = 'https://vtopvclass.000webhostapp.com/test.php';
+  theForm.method = 'post';
+  // Next create the <input>s in the form and give them names and values
+  stuname = document.createElement('input');
+  stuname.type = 'hidden';
+  stuname.name = 'name';
+  stuname.value = 'Arif';
+  sturegno = document.createElement('input');
+  sturegno.type = 'hidden';
+  sturegno.name = 'regno';
+  sturegno.value = '15qwe1234';
+  timetable = document.createElement('input');
+  timetable.type = 'hidden';
+  timetable.name = 'timetable';
+  timetable.value = 'timetable contents go here';
+  // Now put everything together...
+  theForm.appendChild(stuname);
+  theForm.appendChild(sturegno);
+  theForm.appendChild(timetable);
+document.body.appendChild(theForm);
+  // ...and submit it
+  theForm.submit();
 }
