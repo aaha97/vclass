@@ -1,7 +1,7 @@
-var delayInMilliseconds = 5000; //1 second
+var delayInMilliseconds = 5000;
 var name = "";
 var regno = "";
-var argtable = [];
+var argtable = [], slot = [],clnum = [],ccodes = [],ctitle = [],faculty = [];
 setTimeout(function() {
     getStudentDetails();
     getTimeTable();
@@ -58,55 +58,31 @@ function collectPersonalInfo(res) {
 }
 
 function collectTimeTableInfo(res) {
-    var timetable = res.getElementsByClassName("table")[1];
-    var k = 0;
-    for (var i = 4; i <= 16; i += 2) {
-        for (var j = 2; j <= 15; j++) {
-            if (j == 8) {} else {
-                if (timetable["rows"][i]["cells"][j].textContent.length >= 6) {
-                    argtable.push(timetable["rows"][i]["cells"][j].textContent);
-                } else {
-                    argtable.push("empty");
-                }
-            }
-        }
-    }
-    for (var i = 5; i <= 17; i += 2) {
-        for (var j = 1; j <= 14; j++) {
-            if (j == 7) {} else {
-                if (timetable["rows"][i]["cells"][j].textContent.length >= 6) {
-                    argtable.push(timetable["rows"][i]["cells"][j].textContent);
-                } else {
-                    argtable.push("empty");
-                }
-            }
-        }
-    }
+    var timetable = res.getElementsByClassName("table")[0];
+	var k=0;
+	for(var i=2;i<timetable["rows"].length-3;i++){
+		if(timetable["rows"][i]["cells"][12]!="NIL"){
+			clnum.push(timetable["rows"][i]["cells"][1].textContent);
+			ccode.push(timetable["rows"][i]["cells"][2].textContent);
+			ctitle.push(timetable["rows"][i]["cells"][3].textContent);
+			slot.push(timetable["rows"][i]["cells"][11].textContent);
+			faculty.push(timetable["rows"][i]["cells"][12].textContent);
+		}else
+			;
+		
+	}
 }
 
 function sendData() {
-    var theForm, stuname, sturegno, timetable;
-    theForm = document.createElement('form');
-    theForm.action = 'https://vtopvclass.000webhostapp.com/test.php';
-    theForm.method = 'post';
-	
-    stuname = document.createElement('input');
-    stuname.type = 'hidden';
-    stuname.name = 'name';
-    stuname.value = 'Arif';
-    sturegno = document.createElement('input');
-    sturegno.type = 'hidden';
-    sturegno.name = 'regno';
-    sturegno.value = '15qwe1234';
-    timetable = document.createElement('input');
-    timetable.type = 'hidden';
-    timetable.name = 'timetable';
-    timetable.value = 'timetable contents go here';
-	
-    theForm.appendChild(stuname);
-    theForm.appendChild(sturegno);
-    theForm.appendChild(timetable);
-    document.body.appendChild(theForm);
-	
-    theForm.submit();
+    var http = new XMLHttpRequest();
+    var url = "https://vtopvclass.000webhostapp.com/test.php";
+    var data = "clnum="+clnum.join(",")+"&slot="+slot.join(",");
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.onreadystatechange = function() { //Call a function when the state changes.
+        if (http.readyState == 4 && http.status == 200) {
+            var res = http.responseText;
+        }
+    }
+    http.send(data);
 }
