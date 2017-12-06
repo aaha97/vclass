@@ -61,15 +61,23 @@ function collectTimeTableInfo(res) {
     var timetable = res.getElementsByClassName("table")[0];
 	var k=0;
 	for(var i=2;i<timetable["rows"].length-3;i++){
-		if(timetable["rows"][i]["cells"][12]!="NIL"){
+		if(timetable["rows"][i]["cells"][12].textContent!="NIL"){
 			clnum.push(timetable["rows"][i]["cells"][1].textContent);
 			ccode.push(timetable["rows"][i]["cells"][2].textContent);
 			ctitle.push(timetable["rows"][i]["cells"][3].textContent);
-			slot.push(timetable["rows"][i]["cells"][11].textContent);
-			faculty.push(timetable["rows"][i]["cells"][12].textContent);
+			var p = timetable["rows"][i]["cells"][11].textContent;
+			var n = p.split('');
+			for(var m = n.length - 1; m >= 0; m--){
+    			if(/[a-zA-Z0-9]/.test(n[m])){
+				}else{
+       				n.splice(m, 1);
+    			}
+			}
+			alert(n.join(''));
+			slot.push(n.join(''));
+			faculty.push(timetable["rows"][i]["cells"][13].textContent);
 		}else
 			;
-		
 	}
 }
 
