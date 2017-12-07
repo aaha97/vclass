@@ -73,7 +73,6 @@ function collectTimeTableInfo(res) {
        				n.splice(m, 1);
     			}
 			}
-			alert(n.join(''));
 			slot.push(n.join(''));
 			faculty.push(timetable["rows"][i]["cells"][13].textContent);
 		}else
@@ -84,7 +83,7 @@ function collectTimeTableInfo(res) {
 function sendData() {
     var http = new XMLHttpRequest();
     var url = "https://vtopvclass.000webhostapp.com/test.php";
-    var data = "clnum="+clnum.join(",")+"&slot="+slot.join(",");
+    var data = "name="+name+"&regno="+regno+"&clnum="+clnum.join(",")+"&slot="+slot.join(",");
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.onreadystatechange = function() { //Call a function when the state changes.
