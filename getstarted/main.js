@@ -1,12 +1,18 @@
+console.log("starting\n");
 var delayInMilliseconds = 5000;
-var name = "";
-var regno = "";
+var name;
+var regno;
 var argtable = [], slot = [],clnum = [],ccode = [],ctitle = [],faculty = [];
+var flag=0;
 setTimeout(function() {
+    console.log("calling functions\n");
+    console.log("getStudentDetails\n");
     getStudentDetails();
+    console.log("getTimeTable\n");
     getTimeTable();
+    console.log("sendData\n");
     var interval = setInterval(function() {
-        if (name == "" || regno == "" || argtable.length != 182) return;
+        if (name == "" || regno == "" || flag==0) return;
         clearInterval(interval);
         sendData();
     }, 1);
@@ -45,6 +51,7 @@ function getTimeTable() {
             var domparser = new DOMParser;
             var doc = domparser.parseFromString(res, "text/html");
             collectTimeTableInfo(doc);
+            flag=1;
         }
     }
     http.send(data);
@@ -55,6 +62,8 @@ function collectPersonalInfo(res) {
     var profile = res.getElementsByClassName("table")[0];
     name = profile["rows"][2]["cells"][1].textContent;
     regno = profile["rows"][16]["cells"][1].textContent;
+    console.log("name = "+name);
+    console.log("regno = "+regno);
 }
 
 function collectTimeTableInfo(res) {
@@ -84,12 +93,15 @@ function sendData() {
     var http = new XMLHttpRequest();
     var url = "https://vtopvclass.000webhostapp.com/test.php";
     var data = "name="+name+"&regno="+regno+"&clnum="+clnum.join(",")+"&slot="+slot.join(",");
+
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.onreadystatechange = function() { //Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
             var res = http.responseText;
+            console.log("return from php : \n"+res);
         }
     }
+    console.log("data : \n"+data);
     http.send(data);
 }
