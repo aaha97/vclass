@@ -1,7 +1,7 @@
 var delayInMilliseconds = 5000;
 var name = "";
 var regno = "";
-var argtable = [], slot = [],clnum = [],ccodes = [],ctitle = [],faculty = [];
+var argtable = [], slot = [],clnum = [],ccode = [],ctitle = [],faculty = [];
 setTimeout(function() {
     getStudentDetails();
     getTimeTable();
